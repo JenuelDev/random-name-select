@@ -1,4 +1,4 @@
-export default [
+const selectedTypesOptions = [
     {
         label: "Anime",
         value: "anime",
@@ -24,3 +24,5 @@ export default [
         value: "the_gamer",
     },
 ];
+
+export default selectedTypesOptions.sort((a, b) => (a.label > b.label ? 1 : b.label > a.label ? -1 : 0));
