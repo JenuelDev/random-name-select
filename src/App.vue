@@ -44,9 +44,9 @@ function controlSpeed() {
         clearTimeout(timer);
 
         Swal.fire({
-            title: `You Have Won a Prize ${items.value[current_index].name}`,
-            text: "Congratulations!",
+            title: `${items.value[current_index].name} has been Selected!`,
             icon: "success",
+            showConfirmButton: false,
         }).then((con) => {
             document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
             selectedItems.value.push(items.value[current_index]);
@@ -133,7 +133,7 @@ function removeFromSelected(item: any) {
             <div class="flex">
                 <div
                     v-if="items.length"
-                    class="bg-red-500 text-light-50 font-800 p-2 mb-5 cursor-pointer"
+                    class="bg-red-500 text-light-50 font-800 p-2 mb-5 cursor-pointer text-size-30px rounded-xl hover:bg-red-600 active:bg-red-700"
                     @click="init"
                 >
                     <div>START</div>
