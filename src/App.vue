@@ -5,6 +5,7 @@ import AddItem from "./components/AddNewItems.vue";
 import { onMounted, ref } from "vue";
 import ItemCard from "./components/ItemCard.vue";
 import { NCard } from "naive-ui";
+import TokSound from "./assets/soundeffects/tok.mp3";
 
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
@@ -12,6 +13,7 @@ const itemsSelectedStorageKey = "item-selected-items";
 const items = ref<Array<ItemInterface>>([]);
 const selectedItems = ref<Array<ItemInterface>>([]); // contains array of index selected
 const addingItemComponentRef = ref<null | { toggleEdit: Function }>(null);
+const isLoading = ref(false);
 
 const minimum_jumps = 30;
 let current_index = -1;
@@ -21,6 +23,9 @@ let timer: any = 0;
 let prize = -1;
 
 function runCircle() {
+    const tokSound = new Audio(TokSound);
+    tokSound.playbackRate = 2;
+    tokSound.play();
     document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
     current_index += 1;
 
@@ -56,6 +61,7 @@ function controlSpeed() {
 
         prize = -1;
         jumps = 0;
+        isLoading.value = false;
     } else {
         if (jumps < minimum_jumps) speed -= 5;
         else if (jumps === minimum_jumps) {
@@ -74,6 +80,7 @@ function init() {
     jumps = 0;
     speed = 100;
     prize = -1;
+    isLoading.value = true;
     controlSpeed();
 }
 
@@ -131,13 +138,14 @@ function removeFromSelected(item: any) {
         </div>
         <div class="h-full w-full">
             <div class="flex">
-                <div
+                <button
                     v-if="items.length"
-                    class="bg-red-500 text-light-50 font-800 p-2 mb-5 cursor-pointer text-size-30px rounded-xl hover:bg-red-600 active:bg-red-700"
+                    class="bg-red-500 text-light-50 font-800 p-2 mb-5 cursor-pointer text-size-30px rounded-xl hover:bg-red-600 active:bg-red-700 disabled:bg-red-300 disabled:cursor-not-allowed select-none"
                     @click="init"
+                    :disabled="isLoading"
                 >
-                    <div>START</div>
-                </div>
+                    {{ isLoading ? "Rolling..." : "Start" }}
+                </button>
                 <div v-else>Items are Empty, Add items by filling out the form.</div>
             </div>
             <ItemCard :items="items" @edit="edit" @delete="del" />

@@ -25,4 +25,10 @@ const selectedTypesOptions = [
     },
 ];
 
-export default selectedTypesOptions.sort((a, b) => (a.label > b.label ? 1 : b.label > a.label ? -1 : 0));
+export const soundPlay = (value: string) => {
+    return "this-audio";
+};
+
+export default selectedTypesOptions
+    .sort((a, b) => (a.label > b.label ? 1 : b.label > a.label ? -1 : 0))
+    .map((item) => ({ label: item.label, value: item.value }));

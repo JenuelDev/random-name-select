@@ -13,7 +13,7 @@ const emit = defineEmits(["delete", "edit"]);
             :data-order="i"
         >
             <div
-                class="absolute invisible opacity-0 -right-3 -top-0 group-hover:visible group-hover:opacity-100 group-hover:-top-3 transition-all flex gap-5px"
+                class="absolute invisible opacity-0 -right-3 -top-0 group-hover:visible group-hover:opacity-100 group-hover:-top-3 transition-all flex gap-5px select-none"
             >
                 <div
                     class="bg-yellow-600 px-2 text-light-50 rounded-md cursor-pointer hover:bg-yellow-700"
