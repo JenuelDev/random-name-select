@@ -39,7 +39,7 @@ const rules = {
         trigger: ["input"],
     },
     selectedType: {
-        required: true,
+        required: false,
         message: "please Selected Type",
         trigger: ["change"],
     },

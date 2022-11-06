@@ -58,7 +58,7 @@ const emit = defineEmits(["delete", "edit"]);
                     </div>
                 </div>
                 <div class="uppercase whitespace-nowrap">
-                    {{ item.selectedType.split("_").join(" ") }}
+                    {{ item.selectedType ? item.selectedType.split("_").join(" ") : "" }}
                 </div>
             </div>
         </div>
