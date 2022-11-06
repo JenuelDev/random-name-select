@@ -112,7 +112,7 @@ defineExpose({
             <NInput v-model:value="formValue.img" placeholder="Input Age" />
         </NFormItem>
         <NFormItem :label="`${isEdit ? 'Edit ' : ''}Type`" path="selectedType">
-            <NSelect v-model:value="formValue.selectedType" :options="SelectionTypeOptions" />
+            <NSelect v-model:value="formValue.selectedType" :options="SelectionTypeOptions as any" />
         </NFormItem>
         <NFormItem>
             <NButton type="info" @click="handleValidateClick" class="mr-2">

@@ -7,6 +7,7 @@ import ItemCard from "./components/ItemCard.vue";
 import { NCard } from "naive-ui";
 import TokSound from "./assets/soundeffects/tok.mp3";
 import WinSound from "./assets/soundeffects/piglevelwin.mp3";
+import RainParticles from "./components/RainParticles.vue";
 
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
@@ -15,6 +16,8 @@ const items = ref<Array<ItemInterface>>([]);
 const selectedItems = ref<Array<ItemInterface>>([]); // contains array of index selected
 const addingItemComponentRef = ref<null | { toggleEdit: Function }>(null);
 const isLoading = ref(false);
+const isSelectTriggered = ref(false);
+const isInSelectedItems = ref(false);
 
 const minimum_jumps = 30;
 let current_index = -1;
@@ -48,7 +51,7 @@ function controlSpeed() {
     runCircle();
     if (jumps > minimum_jumps + 10 && prize === current_index) {
         clearTimeout(timer);
-
+        isSelectTriggered.value = true;
         const winSound = new Audio(WinSound);
         winSound.play();
 
@@ -61,11 +64,12 @@ function controlSpeed() {
             selectedItems.value.push(items.value[current_index]);
             items.value.splice(current_index, 1);
             saveToStorage();
+            isLoading.value = false;
+            isSelectTriggered.value = false;
         });
 
         prize = -1;
         jumps = 0;
-        isLoading.value = false;
     } else {
         if (jumps < minimum_jumps) speed -= 5;
         else if (jumps === minimum_jumps) {
@@ -102,7 +106,8 @@ onMounted(() => {
     if (selectedItemsSaved) selectedItems.value = selectedItemsSaved;
 });
 
-function edit(item: ItemInterface) {
+function edit(item: ItemInterface, isInSelected = false) {
+    isInSelectedItems.value = isInSelected;
     if (addingItemComponentRef.value) addingItemComponentRef.value.toggleEdit(item);
 }
 
@@ -122,7 +127,8 @@ function del(item: { index: number; data: ItemInterface }) {
 }
 
 function updateItem(item: any) {
-    items.value[item.index] = item.data;
+    if (!isInSelectedItems.value) items.value[item.index] = item.data;
+    else selectedItems.value[item.index] = item.data;
     saveToStorage();
 }
 
@@ -134,6 +140,7 @@ function removeFromSelected(item: any) {
 </script>
 
 <template>
+    <RainParticles v-if="isSelectTriggered" class="z-50" />
     <div class="flex gap-50px p-5 h-[100vh]">
         <div class="h-full w-full max-w-300px">
             <NCard>
@@ -152,11 +159,11 @@ function removeFromSelected(item: any) {
                 </button>
                 <div v-else>Items are Empty, Add items by filling out the form.</div>
             </div>
-            <ItemCard :items="items" @edit="edit" @delete="del" />
+            <ItemCard :items="items" @edit="(item) => edit(item, false)" @delete="del" />
         </div>
         <div class="w-full max-w-300px h-full overflow-y-auto overflow-x-hidden pr-10">
             <h2 class="text-size-20px">Selected:</h2>
-            <ItemCard :items="selectedItems" @edit="edit" @delete="removeFromSelected" />
+            <ItemCard :items="selectedItems" @edit="(item) => edit(item, true)" @delete="removeFromSelected" />
         </div>
     </div>
 </template>

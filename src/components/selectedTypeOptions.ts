@@ -1,5 +1,9 @@
 const selectedTypesOptions = [
     {
+        label: "-- Select --",
+        value: null,
+    },
+    {
         label: "Anime",
         value: "anime",
     },
