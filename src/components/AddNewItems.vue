@@ -26,17 +26,17 @@ const rules = {
     name: {
         required: true,
         message: "Enter Name",
-        trigger: ["input", "blur"],
+        trigger: ["input"],
     },
     nickName: {
         required: true,
         message: "Enter NickName",
-        trigger: ["input", "blur"],
+        trigger: ["input"],
     },
     img: {
         required: false,
         message: "Enter Image URL",
-        trigger: ["input", "blur"],
+        trigger: ["input"],
     },
     selectedType: {
         required: true,
@@ -87,6 +87,10 @@ function toggleEdit(item: any) {
 }
 
 function cancelUpdate() {
+    formValue.value.name = null;
+    formValue.value.img = null;
+    formValue.value.nickName = null;
+    formValue.value.selectedType = null;
     isEdit.value = false;
 }
 

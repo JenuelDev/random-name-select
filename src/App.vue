@@ -6,6 +6,7 @@ import { onMounted, ref } from "vue";
 import ItemCard from "./components/ItemCard.vue";
 import { NCard } from "naive-ui";
 import TokSound from "./assets/soundeffects/tok.mp3";
+import WinSound from "./assets/soundeffects/piglevelwin.mp3";
 
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
@@ -47,6 +48,9 @@ function controlSpeed() {
     runCircle();
     if (jumps > minimum_jumps + 10 && prize === current_index) {
         clearTimeout(timer);
+
+        const winSound = new Audio(WinSound);
+        winSound.play();
 
         Swal.fire({
             title: `${items.value[current_index].name} has been Selected!`,
