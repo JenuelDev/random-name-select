@@ -8,6 +8,7 @@ import { NCard } from "naive-ui";
 import TokSound from "./assets/soundeffects/tok.mp3";
 import WinSound from "./assets/soundeffects/piglevelwin.mp3";
 import RainParticles from "./components/RainParticles.vue";
+import CongratsImagePopOut from "./components/CongratsImagePopOut.vue";
 
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
@@ -56,7 +57,9 @@ function controlSpeed() {
         winSound.play();
 
         Swal.fire({
-            title: `${items.value[current_index].name} has been Selected!`,
+            html: `<span class='text-size-20px'>
+                <span class='font-800'>${items.value[current_index].name}</span> the
+                <span class='font-800 text-red-600'>${items.value[current_index].nickName}</span> has been Selected!</span>`,
             icon: "success",
             showConfirmButton: false,
         }).then((con) => {
@@ -140,6 +143,7 @@ function removeFromSelected(item: any) {
 </script>
 
 <template>
+    <CongratsImagePopOut :show="isSelectTriggered" />
     <RainParticles v-if="isSelectTriggered" class="z-50" />
     <div class="flex gap-50px p-5 h-[100vh]">
         <div class="h-full w-full max-w-300px">
