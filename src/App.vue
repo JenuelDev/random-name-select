@@ -64,7 +64,7 @@ function controlSpeed() {
             showConfirmButton: false,
         }).then((con) => {
             document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
-            selectedItems.value.push(items.value[current_index]);
+            selectedItems.value.unshift(items.value[current_index]);
             items.value.splice(current_index, 1);
             saveToStorage();
             isLoading.value = false;
