@@ -57,11 +57,21 @@ function controlSpeed() {
         winSound.play();
 
         Swal.fire({
-            html: `<span class='text-size-20px'>
-                <span class='font-800'>${items.value[current_index].name}</span> the
-                <span class='font-800 text-red-600'>${items.value[current_index].nickName}</span> has been Selected!</span>`,
+            html: `
+                <div>
+                    <div class='text-size-50px'>
+                        <span class='font-800'>${items.value[current_index].name}</span> 
+                        <div>
+                            the
+                            <span class='font-800 text-red-600'>${items.value[current_index].nickName}</span>    
+                        </div>  
+                    </div>
+                    <div class='text-size-40px'>has been Selected!</div>
+                </div>
+                `,
             icon: "success",
             showConfirmButton: false,
+            position: "top",
         }).then((con) => {
             document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
             selectedItems.value.unshift(items.value[current_index]);
@@ -166,7 +176,7 @@ function removeFromSelected(item: any) {
             <ItemCard :items="items" @edit="(item) => edit(item, false)" @delete="del" />
         </div>
         <div class="w-full max-w-300px h-full overflow-y-auto overflow-x-hidden pr-10">
-            <h2 class="text-size-20px">Selected:</h2>
+            <h2 class="text-size-20px pb-3">Selected:</h2>
             <ItemCard :items="selectedItems" @edit="(item) => edit(item, true)" @delete="removeFromSelected" />
         </div>
     </div>
@@ -177,5 +187,9 @@ function removeFromSelected(item: any) {
     &.is-active {
         border: 10px solid gold !important;
     }
+}
+
+#swal2-html-container {
+    overflow: visible !important;
 }
 </style>
