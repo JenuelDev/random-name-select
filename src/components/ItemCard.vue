@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import defaultItemImage from "./../assets/defaultItemImage.png";
-const props = defineProps(["items"]);
-const emit = defineEmits(["delete", "edit"]);
+const props = defineProps(["items", "moveButton"]);
+const emit = defineEmits(["delete", "edit", "move-to-selected"]);
 </script>
 
 <template>
@@ -36,6 +36,22 @@ const emit = defineEmits(["delete", "edit"]);
                     "
                 >
                     Del
+                </div>
+            </div>
+            <div
+                v-if="moveButton"
+                class="absolute invisible opacity-0 bottom-3 group-hover:visible group-hover:opacity-100 group-hover:bottom-[-25px] transition-all flex gap-5px select-none"
+            >
+                <div
+                    class="rounded-md cursor-pointer shadow bg-light-50 hover:bg-gray-100 px-2"
+                    @click="
+                        $emit('move-to-selected', {
+                            index: i,
+                            data: item,
+                        })
+                    "
+                >
+                    Move To Selected
                 </div>
             </div>
             <div class="w-70px h-70px rounded-10px overflow-hidden flex items-center justify-center relative">

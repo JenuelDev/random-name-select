@@ -60,11 +60,11 @@ function controlSpeed() {
             html: `
                 <div>
                     <div class='text-size-50px'>
-                        <span class='font-800'>${items.value[current_index].name}</span> 
+                        <span class='font-800'>${items.value[current_index].name}</span>
                         <div>
                             the
-                            <span class='font-800 text-red-600'>${items.value[current_index].nickName}</span>    
-                        </div>  
+                            <span class='font-800 text-red-600'>${items.value[current_index].nickName}</span>
+                        </div>
                     </div>
                     <div class='text-size-40px'>has been Selected!</div>
                 </div>
@@ -150,6 +150,12 @@ function removeFromSelected(item: any) {
     selectedItems.value.splice(item.index, 1);
     saveToStorage();
 }
+
+function moveToSelected(data: { index: number; data: any }) {
+    items.value.splice(data.index, 1);
+    selectedItems.value.unshift(data.data);
+    saveToStorage();
+}
 </script>
 
 <template>
@@ -173,7 +179,13 @@ function removeFromSelected(item: any) {
                 </button>
                 <div v-else>Items are Empty, Add items by filling out the form.</div>
             </div>
-            <ItemCard :items="items" @edit="(item) => edit(item, false)" @delete="del" />
+            <ItemCard
+                :items="items"
+                @edit="(item) => edit(item, false)"
+                @delete="del"
+                @move-to-selected="moveToSelected"
+                :moveButton="true"
+            />
         </div>
         <div class="w-full max-w-300px h-full overflow-y-auto overflow-x-hidden pr-10">
             <h2 class="text-size-20px pb-3">Selected:</h2>
