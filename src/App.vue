@@ -52,12 +52,14 @@ function controlSpeed() {
     runCircle();
     if (jumps > minimum_jumps + 10 && prize === current_index) {
         clearTimeout(timer);
-        isSelectTriggered.value = true;
-        const winSound = new Audio(WinSound);
-        winSound.play();
 
-        Swal.fire({
-            html: `
+        setTimeout(() => {
+            isSelectTriggered.value = true;
+            const winSound = new Audio(WinSound);
+            winSound.play();
+
+            Swal.fire({
+                html: `
                 <div>
                     <div class='text-size-50px'>
                         <span class='font-800'>${items.value[current_index].name}</span>
@@ -69,20 +71,21 @@ function controlSpeed() {
                     <div class='text-size-40px'>has been Selected!</div>
                 </div>
                 `,
-            icon: "success",
-            showConfirmButton: false,
-            position: "top",
-        }).then((con) => {
-            document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
-            selectedItems.value.unshift(items.value[current_index]);
-            items.value.splice(current_index, 1);
-            saveToStorage();
-            isLoading.value = false;
-            isSelectTriggered.value = false;
-        });
+                icon: "success",
+                showConfirmButton: false,
+                position: "top",
+            }).then((con) => {
+                document.querySelector(`[data-order="${current_index}"]`)?.classList.remove("is-active");
+                selectedItems.value.unshift(items.value[current_index]);
+                items.value.splice(current_index, 1);
+                saveToStorage();
+                isLoading.value = false;
+                isSelectTriggered.value = false;
+            });
 
-        prize = -1;
-        jumps = 0;
+            prize = -1;
+            jumps = 0;
+        }, 2000);
     } else {
         if (jumps < minimum_jumps) speed -= 5;
         else if (jumps === minimum_jumps) {
