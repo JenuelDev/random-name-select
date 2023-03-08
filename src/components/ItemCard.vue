@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import defaultItemImage from "./../assets/defaultItemImage.png";
-const props = defineProps(["items", "moveButton"]);
+const props = defineProps(["items", "moveButton", "noAction"]);
 const emit = defineEmits(["delete", "edit", "move-to-selected"]);
 </script>
 
@@ -13,6 +13,7 @@ const emit = defineEmits(["delete", "edit", "move-to-selected"]);
             :data-order="i"
         >
             <div
+                v-if="$props.noAction != false"
                 class="absolute invisible opacity-0 -right-3 -top-0 group-hover:visible group-hover:opacity-100 group-hover:-top-3 transition-all flex gap-5px select-none"
             >
                 <div
@@ -40,10 +41,10 @@ const emit = defineEmits(["delete", "edit", "move-to-selected"]);
             </div>
             <div
                 v-if="moveButton"
-                class="absolute invisible opacity-0 bottom-3 group-hover:visible group-hover:opacity-100 group-hover:bottom-[-25px] transition-all flex gap-5px select-none"
+                class="absolute invisible opacity-0 bottom-3 left-0 group-hover:visible group-hover:opacity-100 group-hover:bottom-[-25px] transition-all flex gap-5px select-none z-999"
             >
                 <div
-                    class="rounded-md cursor-pointer shadow bg-light-50 hover:bg-gray-100 px-2"
+                    class="rounded-md cursor-pointer shadow bg-light-50 hover:bg-gray-100 px-2 whitespace-nowrap"
                     @click="
                         $emit('move-to-selected', {
                             index: i,
@@ -52,6 +53,17 @@ const emit = defineEmits(["delete", "edit", "move-to-selected"]);
                     "
                 >
                     Move To Selected
+                </div>
+                <div
+                    class="rounded-md cursor-pointer shadow bg-light-50 hover:bg-gray-100 px-2 whitespace-nowrap"
+                    @click="
+                        $emit('move-to-done', {
+                            index: i,
+                            data: item,
+                        })
+                    "
+                >
+                    Move To Done
                 </div>
             </div>
             <div class="w-70px h-70px rounded-10px overflow-hidden flex items-center justify-center relative">

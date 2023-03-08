@@ -13,8 +13,10 @@ import CongratsImagePopOut from "./components/CongratsImagePopOut.vue";
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
 const itemsSelectedStorageKey = "item-selected-items";
+const itemDoneSelectedStorageKey = "item-done-selected-items";
 const items = ref<Array<ItemInterface>>([]);
 const selectedItems = ref<Array<ItemInterface>>([]); // contains array of index selected
+const doneSelectedItems = ref<Array<ItemInterface>>([]);
 const addingItemComponentRef = ref<null | { toggleEdit: Function }>(null);
 const isLoading = ref(false);
 const isSelectTriggered = ref(false);
@@ -45,6 +47,7 @@ function generatePrizeNumber() {
 function saveToStorage() {
     Storage.set(itemsSelectedStorageKey, selectedItems.value);
     Storage.set(itemStorageKey, items.value);
+    Storage.set(itemDoneSelectedStorageKey, doneSelectedItems.value);
 }
 
 function controlSpeed() {
@@ -109,7 +112,6 @@ function init() {
 }
 
 function addItem(item: any) {
-    console.log(item);
     items.value.push(item);
     Storage.set(itemStorageKey, items.value);
 }
@@ -120,6 +122,9 @@ onMounted(() => {
 
     const selectedItemsSaved = Storage.get(itemsSelectedStorageKey);
     if (selectedItemsSaved) selectedItems.value = selectedItemsSaved;
+
+    const doneSelectedItemsSaved = Storage.get(itemDoneSelectedStorageKey);
+    if (doneSelectedItemsSaved) doneSelectedItems.value = doneSelectedItemsSaved;
 });
 
 function edit(item: ItemInterface, isInSelected = false) {
@@ -159,12 +164,41 @@ function moveToSelected(data: { index: number; data: any }) {
     selectedItems.value.unshift(data.data);
     saveToStorage();
 }
+
+function clickFinished() {
+    doneSelectedItems.value = [...doneSelectedItems.value, ...selectedItems.value];
+    selectedItems.value = [];
+    saveToStorage();
+}
+
+function removeFromDoneSelected(item: any) {
+    items.value.push(item.data);
+    doneSelectedItems.value.splice(item.index, 1);
+    saveToStorage();
+}
+
+function reset() {
+    items.value = [...items.value, ...selectedItems.value, ...doneSelectedItems.value];
+    selectedItems.value = [];
+    doneSelectedItems.value = [];
+
+    saveToStorage();
+}
+
+function moveToDone(data: { index: number; data: any }) {
+    items.value.splice(data.index, 1);
+    doneSelectedItems.value.unshift(data.data);
+
+    saveToStorage();
+}
+
+const showAddItemCard = ref(false);
 </script>
 
 <template>
     <CongratsImagePopOut :show="isSelectTriggered" />
     <RainParticles v-if="isSelectTriggered" class="z-50" />
-    <div class="flex gap-50px p-5 h-[100vh]">
+    <div class="flex gap-50px p-2 h-[100vh]">
         <div class="h-full w-full max-w-300px">
             <NCard>
                 <AddItem ref="addingItemComponentRef" @add="addItem" @update="updateItem" />
@@ -187,12 +221,37 @@ function moveToSelected(data: { index: number; data: any }) {
                 @edit="(item) => edit(item, false)"
                 @delete="del"
                 @move-to-selected="moveToSelected"
+                @move-to-done="moveToDone"
                 :moveButton="true"
             />
         </div>
-        <div class="w-full max-w-300px h-full overflow-y-auto overflow-x-hidden pr-10">
-            <h2 class="text-size-20px pb-3">Selected:</h2>
-            <ItemCard :items="selectedItems" @edit="(item) => edit(item, true)" @delete="removeFromSelected" />
+        <div class="w-380px h-full flex flex-col">
+            <div class="h-1/2 flex flex-col">
+                <h2 class="text-size-20px pb-3 h-30px">Selected:</h2>
+                <div class="overflow-y-auto overflow-x-hidden px-4">
+                    <ItemCard :items="selectedItems" @edit="(item) => edit(item, true)" @delete="removeFromSelected" />
+                    <button
+                        v-if="selectedItems.length >= 2"
+                        class="text-center px-4 py-1 w-full mt-10px font-800 bg-red-500 text-white rounded-md"
+                        @click="clickFinished()"
+                    >
+                        Finished
+                    </button>
+                </div>
+            </div>
+            <div class="h-1/2 flex flex-col">
+                <div class="flex justify-between h-30px">
+                    <h2 class="text-size-20px pb-3">Done:</h2>
+                    <button class="hover:underline" @click="reset">Reset</button>
+                </div>
+                <div class="overflow-y-auto overflow-x-hidden px-4">
+                    <ItemCard
+                        :items="doneSelectedItems"
+                        @edit="(item) => edit(item, true)"
+                        @delete="removeFromDoneSelected"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
