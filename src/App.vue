@@ -227,7 +227,7 @@ const showAddItemCard = ref(false);
         </div>
         <div class="w-380px h-full flex flex-col">
             <div class="h-1/2 flex flex-col">
-                <h2 class="text-size-20px pb-3 h-30px">Selected:</h2>
+                <h2 class="text-size-20px pb-3 h-30px font-700">Selected:</h2>
                 <div class="overflow-y-auto overflow-x-hidden px-4">
                     <ItemCard :items="selectedItems" @edit="(item) => edit(item, true)" @delete="removeFromSelected" />
                     <button
@@ -241,7 +241,7 @@ const showAddItemCard = ref(false);
             </div>
             <div class="h-1/2 flex flex-col">
                 <div class="flex justify-between h-30px">
-                    <h2 class="text-size-20px pb-3">Done:</h2>
+                    <h2 class="text-size-20px pb-3 font-700">Done:</h2>
                     <button class="hover:underline" @click="reset">Reset</button>
                 </div>
                 <div class="overflow-y-auto overflow-x-hidden px-4">
