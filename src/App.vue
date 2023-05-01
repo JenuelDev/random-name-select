@@ -9,6 +9,7 @@ import TokSound from "./assets/soundeffects/tok.mp3";
 import WinSound from "./assets/soundeffects/piglevelwin.mp3";
 import RainParticles from "./components/RainParticles.vue";
 import CongratsImagePopOut from "./components/CongratsImagePopOut.vue";
+import RainMoney from "./components/RainMoney.vue";
 
 type ItemInterface = { name: string; nickName: string; img: string; selectedType: string };
 const itemStorageKey = "random-selector-items";
@@ -196,6 +197,7 @@ const showAddItemCard = ref(false);
 </script>
 
 <template>
+    <RainMoney v-if="isSelectTriggered" />
     <CongratsImagePopOut :show="isSelectTriggered" />
     <RainParticles v-if="isSelectTriggered" class="z-50" />
     <div class="flex gap-50px p-2 h-[100vh]">
@@ -265,5 +267,9 @@ const showAddItemCard = ref(false);
 
 #swal2-html-container {
     overflow: visible !important;
+}
+
+.swal2-popup {
+    z-index: 9999999;
 }
 </style>
