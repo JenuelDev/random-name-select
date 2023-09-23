@@ -9,11 +9,14 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "canvas-confetti": "^1.6.0",
         "storage-container-js": "^0.1.5",
         "sweetalert2": "^11.6.5",
         "vue": "^3.2.41"
     },
     "devDependencies": {
+        "@types/canvas-confetti": "^1.6.0",
+        "@types/node": "^20.5.7",
         "@vitejs/plugin-vue": "^3.2.0",
         "naive-ui": "^2.33.5",
         "sass": "^1.55.0",
